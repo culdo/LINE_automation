@@ -18,7 +18,7 @@ LINE.go_room("110級機器人一甲")                            # 進賴群
 LINE.send("我是一條訊息")                                  # 發訊息
 
 ```
-### 自動發送&回覆
+#### 自動發送&回覆
 ```python
 for i in range(10):
   LINE.send("自己傳十次訊息")  
@@ -36,3 +36,6 @@ while True:
 - [ ] 取得未讀群組清單
 - [ ] 發圖片
 - [ ] 發貼圖
+
+## License
+MIT License
