@@ -12,18 +12,20 @@ pip install selenium
 ```python
 import LINE
 
-account = LINE("你的帳號", "沒忘的密碼", "手機信箱＠gmail.com")   # 登入賴，程式會自動發送驗證碼至手機信箱
-account.set_room("110級機器人一甲")                            # 進賴群
-account.send("我是一條訊息")                               # 發訊息
+LINE.login("你的帳號", "沒忘的密碼", "用LINE的手機信箱＠gmail.com")   # 登入賴，程式自動發送登入驗證碼至手機信箱
+
+LINE.go_room("110級機器人一甲")                            # 進賴群
+LINE.send("我是一條訊息")                                  # 發訊息
+
 ```
 ### 自動發送&回覆
 ```python
 for i in range(10):
-  account.send("自己傳十次訊息")  
+  LINE.send("自己傳十次訊息")  
 
 while True:
-  if account.has_new:
-    account.send(account.read())  # 別人發什麼 你就回什麼
+  if LINE.has_new:
+    LINE.send(account.read())                              # 別人發什麼 你就回什麼
 ```
 
 ### 願望清單
