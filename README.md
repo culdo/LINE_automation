@@ -24,8 +24,9 @@ for i in range(10):
   LINE.send("自己傳十次訊息")  
 
 while True:
-  if LINE.has_new:
-    LINE.send(account.read())                              # 別人發什麼 你就回什麼
+  msg = LINE.has_new("Other")                          # 別人發什麼
+  if msg:
+    LINE.send(msg)                                     # 你就回什麼
 ```
 
 ### 願望清單
