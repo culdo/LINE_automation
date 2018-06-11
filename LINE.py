@@ -8,7 +8,7 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import os, time, platform
-from selenium.common.exceptions import WebDriverException
+from selenium.common.exceptions import WebDriverException, NoSuchElementException
 stu_user = 'use4rline@gmail.com'
 stu_passwd = 'CIR4LINE'
 TEXT = "驗證碼："
@@ -43,10 +43,10 @@ def go_room(room):
     input_area = browser.find_element_by_id("_chat_room_input")
 
 
-def has_new(setwho="Other"):
+def has_new(setwho="All"):
     global data_local_id
-    if setwho == "ALL":
-        updated = browser.find_elements_by_class_name("MdRGT07Other")[-1]
+    if setwho == "All":
+        updated = browser.find_elements_by_class_name("MdRGT07Cont")[-1]
     else:
         updated = browser.find_elements_by_class_name("mdRGT07"+setwho)[-1]
     data_local_id_now = updated.get_attribute("data-local-id")
@@ -56,7 +56,6 @@ def has_new(setwho="Other"):
         while not new_text:
             new_text = updated.find_element_by_class_name("mdRGT07MsgTextInner").text
         return new_text
-
 
 
 def read():
