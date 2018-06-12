@@ -42,5 +42,6 @@ while True:
 - [ ] 發圖片
 - [ ] 發貼圖
 
-# LICENSE
-MIT License
+## License
+
+[MIT](https://github.com/electron/electron/blob/master/LICENSE)
