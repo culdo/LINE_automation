@@ -23,20 +23,21 @@ jquery = r'$("#_chat_room_input").text(arguments[0])'
 chrome_option = Options()
 # chrome_option.add_argument('--headless')
 if platform.system() == 'Linux':
-    chrome_option.add_argument("--load-extension=" + os.environ['HOME'] + "/.config/google-chrome/Profile 1/Extensions/ophjlpahpchlmihnnnihgmmeilfjmjjc/2.1.4_0/")
+    chrome_option.add_argument("--load-extension=" + os.environ['HOME'] + "/.config/google-chrome/Default/Extensions/ophjlpahpchlmihnnnihgmmeilfjmjjc/2.1.4_0/")
 else:
     chrome_option.add_argument("--load-extension=" + os.environ[
         'userprofile'] + r"\AppData\Local\Google\Chrome\User Data\Default\ophjlpahpchlmihnnnihgmmeilfjmjjc\2.1.4_0")
 browser = Chrome(chrome_options=chrome_option)
 
 
-def go_room(room):
+def choose_room(room):
     global data_local_id, input_area
+    browser.find_element_by_id("_search_input").send_keys(room)
 
     element = WebDriverWait(browser, 99).until(
         EC.presence_of_element_located((By.XPATH, '//*[@title="'+room+'"]')))
-    browser.execute_script("arguments[0].scrollIntoView(true);", element)
     element.click()
+    browser.find_element_by_css_selector("#_search > div > button").click()
 
     time.sleep(0.5)
     data_local_id = browser.find_element_by_css_selector("div.MdRGT07Cont:last-child").get_attribute("data-local-id")
