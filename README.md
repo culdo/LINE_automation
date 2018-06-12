@@ -42,5 +42,5 @@ while True:
 - [ ] 發圖片
 - [ ] 發貼圖
 
-## LICENSE
+# LICENSE
 MIT License
