@@ -1,8 +1,9 @@
 import LINE
 import serial
+import time
 
 LINE.login("george0228489372@yahoo.com.tw", "wuorsut", "wuorsut@gmail.com")
-LINE.go_room("Alo Smo")
+LINE.choose_room("Alo Smo")
 
 p="/dev/ttyUSB0"
 while True:
