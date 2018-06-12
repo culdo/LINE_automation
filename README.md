@@ -18,7 +18,7 @@ import LINE
 
 LINE.login("你的帳號", "沒忘的密碼", "用LINE的手機信箱＠gmail.com")   # 登入賴，程式自動發送登入驗證碼至手機信箱
 
-LINE.go_room("110級機器人一甲")                            # 進賴群
+LINE.choose_room("110級機器人一甲")                            # 進賴群
 LINE.send("我是一條訊息")                                  # 發訊息
 
 ```
