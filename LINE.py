@@ -22,8 +22,12 @@ server.login(stu_user, stu_passwd)
 jquery = r'$("#_chat_room_input").text(arguments[0])'
 chrome_option = Options()
 # chrome_option.add_argument('--headless')
+ext_path = "/Default/Extensions/ophjlpahpchlmihnnnihgmmeilfjmjjc/2.1.4_0/"
 if platform.system() == 'Linux':
-    chrome_option.add_argument("--load-extension=" + os.environ['HOME'] + "/.config/google-chrome/Default/Extensions/ophjlpahpchlmihnnnihgmmeilfjmjjc/2.1.4_0/")
+    ext_path = os.environ['HOME'] + "/.config/google-chrome"+ext_path if os.path.exists("/.config/google-chrome") else os.environ['HOME'] + "/.config/chromium"+ext_path
+    if not os.path.exists(ext_path):
+        Chrome().get("https://chrome.google.com/webstore/detail/line/ophjlpahpchlmihnnnihgmmeilfjmjjc?hl=en")
+    chrome_option.add_argument("--load-extension=" + ext_path)
 else:
     chrome_option.add_argument("--load-extension=" + os.environ[
         'userprofile'] + r"\AppData\Local\Google\Chrome\User Data\Default\ophjlpahpchlmihnnnihgmmeilfjmjjc\2.1.4_0")
@@ -32,11 +36,15 @@ browser = Chrome(chrome_options=chrome_option)
 
 def choose_room(room):
     global data_local_id, input_area
-    browser.find_element_by_id("_search_input").send_keys(room)
 
     element = WebDriverWait(browser, 99).until(
-        EC.presence_of_element_located((By.XPATH, '//*[@title="'+room+'"]')))
+        EC.presence_of_element_located((By.ID, "_search_input")))
+    element.send_keys(room)
+    # time.sleep(0.5)
+    element = WebDriverWait(browser, 99).until(
+        EC.presence_of_element_located((By.XPATH, '//*[@id="_chat_list_body"]/li[@title="'+room+'"]')))
     element.click()
+    time.sleep(0.5)
     browser.find_element_by_css_selector("#_search > div > button").click()
 
     time.sleep(0.5)
@@ -95,3 +103,12 @@ def login(username, pwd, email=None):
     print('email sent')
     server.quit()
 
+
+if __name__ == "__main__":
+    login("george0228489372@yahoo.com.tw", "wuorsut", "wuorsut@gmail.com")
+    choose_room("Alo Smo")
+
+    while True:
+        text = has_new()
+        if text:
+            print(text)
