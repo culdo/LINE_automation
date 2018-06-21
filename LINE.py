@@ -29,8 +29,11 @@ if platform.system() == 'Linux':
         Chrome().get("https://chrome.google.com/webstore/detail/line/ophjlpahpchlmihnnnihgmmeilfjmjjc?hl=en")
     chrome_option.add_argument("--load-extension=" + ext_path)
 else:
-    chrome_option.add_argument("--load-extension=" + os.environ[
-        'userprofile'] + r"\AppData\Local\Google\Chrome\User Data\Default\ophjlpahpchlmihnnnihgmmeilfjmjjc\2.1.4_0")
+    ext_path = os.environ[
+        'userprofile'] + r"\AppData\Local\Google\Chrome\User Data\Default\ophjlpahpchlmihnnnihgmmeilfjmjjc\2.1.4_0"
+    if not os.path.exists(ext_path):
+        Chrome().get("https://chrome.google.com/webstore/detail/line/ophjlpahpchlmihnnnihgmmeilfjmjjc?hl=en")
+    chrome_option.add_argument("--load-extension=" + ext_path)
 browser = Chrome(chrome_options=chrome_option)
 
 
