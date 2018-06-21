@@ -9,6 +9,8 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import os, time, platform
 from selenium.common.exceptions import WebDriverException, NoSuchElementException
+import webbrowser
+
 stu_user = 'use4rline@gmail.com'
 stu_passwd = 'CIR4LINE'
 TEXT = "驗證碼："
@@ -23,18 +25,22 @@ jquery = r'$("#_chat_room_input").text(arguments[0])'
 chrome_option = Options()
 # chrome_option.add_argument('--headless')
 ext_path = "/Default/Extensions/ophjlpahpchlmihnnnihgmmeilfjmjjc/2.1.4_0/"
+chrome_path = 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s'
+
 if platform.system() == 'Linux':
     ext_path = os.environ['HOME'] + "/.config/google-chrome"+ext_path if os.path.exists("/.config/google-chrome") else os.environ['HOME'] + "/.config/chromium"+ext_path
-    if not os.path.exists(ext_path):
-        Chrome().get("https://chrome.google.com/webstore/detail/line/ophjlpahpchlmihnnnihgmmeilfjmjjc?hl=en")
-    chrome_option.add_argument("--load-extension=" + ext_path)
 else:
     ext_path = os.environ[
-        'userprofile'] + r"\AppData\Local\Google\Chrome\User Data\Default\ophjlpahpchlmihnnnihgmmeilfjmjjc\2.1.4_0"
-    if not os.path.exists(ext_path):
-        Chrome().get("https://chrome.google.com/webstore/detail/line/ophjlpahpchlmihnnnihgmmeilfjmjjc?hl=en")
+        'LOCALAPPDATA'] + r"\Google\Chrome\User Data\Default\Extensions\ophjlpahpchlmihnnnihgmmeilfjmjjc\2.1.4_0"
+
+if not os.path.exists(ext_path):
+    webbrowser.get(chrome_path).open("https://chrome.google.com/webstore/detail/line/ophjlpahpchlmihnnnihgmmeilfjmjjc?hl=en")
+else:
     chrome_option.add_argument("--load-extension=" + ext_path)
-browser = Chrome(chrome_options=chrome_option)
+    browser = Chrome(chrome_options=chrome_option)
+
+# chrome_option.add_extension("extension_2_1_4_0.crx")
+
 
 
 def choose_room(room):
@@ -107,11 +113,11 @@ def login(username, pwd, email=None):
     server.quit()
 
 
-if __name__ == "__main__":
-    login("george0228489372@yahoo.com.tw", "wuorsut", "wuorsut@gmail.com")
-    choose_room("Alo Smo")
-
-    while True:
-        text = has_new()
-        if text:
-            print(text)
+# if __name__ == "__main__":
+#     login("george0228489372@yahoo.com.tw", "wuorsut", "wuorsut@gmail.com")
+#     choose_room("Alo Smo")
+#
+#     while True:
+#         text = has_new()
+#         if text:
+#             print(text)
