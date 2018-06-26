@@ -8,7 +8,7 @@
 ```shell
 pip3 install selenium
 ```
-* 再來你只要下載[LINE.py](https://culdo.github.io/LINE_automation/LINE.py)
+* 再來你只要下載 [LINE.py](https://culdo.github.io/LINE_automation/LINE.py)
 ## 使用
 在你的Python腳本內Import
 ```python
