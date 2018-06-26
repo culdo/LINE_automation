@@ -24,14 +24,14 @@ server.login(stu_user, stu_passwd)
 jquery = r'$("#_chat_room_input").text(arguments[0])'
 chrome_option = Options()
 # chrome_option.add_argument('--headless')
-ext_path = "/Default/Extensions/ophjlpahpchlmihnnnihgmmeilfjmjjc/2.1.4_0/"
+ext_path = "/Default/Extensions/ophjlpahpchlmihnnnihgmmeilfjmjjc/2.1.5_0/"
 chrome_path = 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s'
 
 if platform.system() == 'Linux':
     ext_path = os.environ['HOME'] + "/.config/google-chrome"+ext_path if os.path.exists("/.config/google-chrome") else os.environ['HOME'] + "/.config/chromium"+ext_path
 else:
     ext_path = os.environ[
-        'LOCALAPPDATA'] + r"\Google\Chrome\User Data\Default\Extensions\ophjlpahpchlmihnnnihgmmeilfjmjjc\2.1.4_0"
+        'LOCALAPPDATA'] + r"\Google\Chrome\User Data\Default\Extensions\ophjlpahpchlmihnnnihgmmeilfjmjjc\2.1.5_0"
 
 if not os.path.exists(ext_path):
     webbrowser.get(chrome_path).open("https://chrome.google.com/webstore/detail/line/ophjlpahpchlmihnnnihgmmeilfjmjjc?hl=en")
