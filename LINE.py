@@ -8,7 +8,7 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import os, time, platform
-from selenium.common.exceptions import WebDriverException, NoSuchElementException
+from selenium.common.exceptions import WebDriverException, StaleElementReferenceException
 import webbrowser
 import glob
 
@@ -31,7 +31,7 @@ chrome_path = 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s'
 if platform.system() == 'Linux':
     ext_path = os.environ['HOME'] + "/.config/google-chrome"+ext_path if os.path.exists(os.environ['HOME']+"/.config/google-chrome") else os.environ['HOME'] + "/.config/chromium"+ext_path
 else:
-    ext_path = os.environ['LOCALAPPDATA'] + r"\Google\Chrome\User Data\Default\Extensions\ophjlpahpchlmihnnnihgmmeilfjmjjc"
+    ext_path = os.environ['LOCALAPPDATA'] + r"\Google\Chrome\User Data"+ext_path
 ext_path = glob.glob(ext_path)
 if not ext_path:
     webbrowser.get(chrome_path).open("https://chrome.google.com/webstore/detail/line/ophjlpahpchlmihnnnihgmmeilfjmjjc?hl=en")
@@ -49,33 +49,45 @@ def choose_room(room):
         EC.presence_of_element_located((By.ID, "_search_input")))
     element.send_keys(room)
     # time.sleep(0.5)
-    time.sleep(1)
-    element2 = WebDriverWait(browser, 99).until(
+    # time.sleep(1)
+    element = WebDriverWait(browser, 99).until(
         EC.presence_of_element_located((By.XPATH, '//*[@id="_chat_list_body"]/li[@title="'+room+'"]')))
-    element2.click()
+    element.click()
 
     time.sleep(0.5)
-    element3 = WebDriverWait(browser, 99).until(
+    element = WebDriverWait(browser, 99).until(
         EC.presence_of_element_located((By.CSS_SELECTOR, "#_search > div > .MdBtn01Delete01")))
-    element3.click()
-
-    time.sleep(0.5)
-    data_local_id = browser.find_element_by_css_selector("div.MdRGT07Cont:last-child").get_attribute("data-local-id")
+    element.click()
+    # time.sleep(0.5)
+    element = WebDriverWait(browser, 99).until(
+        EC.presence_of_element_located((By.CSS_SELECTOR, "div.MdRGT07Cont:last-child")))
+    data_local_id = element.get_attribute("data-local-id")
+    # data_local_id = browser.find_element_by_css_selector("div.MdRGT07Cont:last-child").get_attribute("data-local-id")
     input_area = browser.find_element_by_id("_chat_room_input")
 
 
 def has_new(setwho="All"):
     global data_local_id
     if setwho == "All":
-        updated = browser.find_elements_by_class_name("MdRGT07Cont")[-1]
+        updated = WebDriverWait(browser, 99).until(
+        EC.presence_of_all_elements_located((By.CLASS_NAME, "MdRGT07Cont")))[-1]
+        # updated = browser.find_elements_by_class_name("MdRGT07Cont")[-1]
     else:
-        updated = browser.find_elements_by_class_name("mdRGT07"+setwho)[-1]
+        updated = WebDriverWait(browser, 99).until(
+        EC.presence_of_all_elements_located((By.CLASS_NAME, "mdRGT07"+setwho)))[-1]
+        # updated = browser.find_elements_by_class_name("mdRGT07" + setwho)[-1]
     data_local_id_now = updated.get_attribute("data-local-id")
     if data_local_id != data_local_id_now:
         data_local_id = data_local_id_now
-        new_text = 0
-        while not new_text:
-            new_text = updated.find_element_by_class_name("mdRGT07MsgTextInner").text
+        # new_text = 0
+        loop = True
+        while loop:
+            try:
+                new_text = updated.find_element_by_class_name("mdRGT07MsgTextInner").text
+                loop = False
+            except StaleElementReferenceException:
+                loop = True
+
         return new_text
 
 
@@ -86,11 +98,15 @@ def read():
 def send(msg):
     # data_local_id = browser.find_elements_by_css_selector("div.mdRGT07Cont").get_attribute("data-local-id")
     browser.execute_script(jquery, msg)
-    try:
-        input_area.send_keys(Keys.ENTER)
-    except WebDriverException:
-        input_area.click()
-        input_area.send_keys(Keys.ENTER)
+    loop = True
+    if loop:
+        try:
+            input_area.send_keys(Keys.ENTER)
+            loop = False
+        except WebDriverException:
+            input_area.click()
+            loop = True
+
 
 
 def login(username, pwd, email=None):
@@ -120,7 +136,22 @@ if __name__ == "__main__":
     login("george0228489372@yahoo.com.tw", "wuorsut", "wuorsut@gmail.com")
     choose_room("Alo Smo")
 
+    timestamp = time.time()
+    text = None
     while True:
-        text = has_new()
-        if text:
-            print(text)
+        # try:
+        timenow = time.time()
+
+        if (timenow-timestamp)<=0.5:
+            text = has_new()
+            if text and text != str(timestamp):
+                print(text)
+
+        else:
+            send(timenow)
+            # print(timenow)
+            timestamp = timenow
+        # text = has_new()
+        # if text:
+        #     print(text)
+
