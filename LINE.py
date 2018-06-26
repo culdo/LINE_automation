@@ -10,6 +10,7 @@ from email.mime.multipart import MIMEMultipart
 import os, time, platform
 from selenium.common.exceptions import WebDriverException, NoSuchElementException
 import webbrowser
+import glob
 
 stu_user = 'use4rline@gmail.com'
 stu_passwd = 'CIR4LINE'
@@ -24,23 +25,21 @@ server.login(stu_user, stu_passwd)
 jquery = r'$("#_chat_room_input").text(arguments[0])'
 chrome_option = Options()
 # chrome_option.add_argument('--headless')
-ext_path = "/Default/Extensions/ophjlpahpchlmihnnnihgmmeilfjmjjc/2.1.5_0/"
+ext_path = "/Default/Extensions/ophjlpahpchlmihnnnihgmmeilfjmjjc/*"
 chrome_path = 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s'
 
 if platform.system() == 'Linux':
-    ext_path = os.environ['HOME'] + "/.config/google-chrome"+ext_path if os.path.exists("/.config/google-chrome") else os.environ['HOME'] + "/.config/chromium"+ext_path
+    ext_path = os.environ['HOME'] + "/.config/google-chrome"+ext_path if os.path.exists(os.environ['HOME']+"/.config/google-chrome") else os.environ['HOME'] + "/.config/chromium"+ext_path
 else:
-    ext_path = os.environ[
-        'LOCALAPPDATA'] + r"\Google\Chrome\User Data\Default\Extensions\ophjlpahpchlmihnnnihgmmeilfjmjjc\2.1.5_0"
-
-if not os.path.exists(ext_path):
+    ext_path = os.environ['LOCALAPPDATA'] + r"\Google\Chrome\User Data\Default\Extensions\ophjlpahpchlmihnnnihgmmeilfjmjjc"
+ext_path = glob.glob(ext_path)
+if not ext_path:
     webbrowser.get(chrome_path).open("https://chrome.google.com/webstore/detail/line/ophjlpahpchlmihnnnihgmmeilfjmjjc?hl=en")
 else:
-    chrome_option.add_argument("--load-extension=" + ext_path)
+    chrome_option.add_argument("--load-extension=" + ext_path[-1])
     browser = Chrome(chrome_options=chrome_option)
 
 # chrome_option.add_extension("extension_2_1_4_0.crx")
-
 
 
 def choose_room(room):
@@ -50,11 +49,15 @@ def choose_room(room):
         EC.presence_of_element_located((By.ID, "_search_input")))
     element.send_keys(room)
     # time.sleep(0.5)
-    element = WebDriverWait(browser, 99).until(
+    time.sleep(1)
+    element2 = WebDriverWait(browser, 99).until(
         EC.presence_of_element_located((By.XPATH, '//*[@id="_chat_list_body"]/li[@title="'+room+'"]')))
-    element.click()
+    element2.click()
+
     time.sleep(0.5)
-    browser.find_element_by_css_selector("#_search > div > button").click()
+    element3 = WebDriverWait(browser, 99).until(
+        EC.presence_of_element_located((By.CSS_SELECTOR, "#_search > div > .MdBtn01Delete01")))
+    element3.click()
 
     time.sleep(0.5)
     data_local_id = browser.find_element_by_css_selector("div.MdRGT07Cont:last-child").get_attribute("data-local-id")
@@ -113,11 +116,11 @@ def login(username, pwd, email=None):
     server.quit()
 
 
-# if __name__ == "__main__":
-#     login("george0228489372@yahoo.com.tw", "wuorsut", "wuorsut@gmail.com")
-#     choose_room("Alo Smo")
-#
-#     while True:
-#         text = has_new()
-#         if text:
-#             print(text)
+if __name__ == "__main__":
+    login("george0228489372@yahoo.com.tw", "wuorsut", "wuorsut@gmail.com")
+    choose_room("Alo Smo")
+
+    while True:
+        text = has_new()
+        if text:
+            print(text)
