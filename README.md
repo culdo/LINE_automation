@@ -1,12 +1,10 @@
 # LINE_automation
 一個讓LINE操作自動化的工具
 ## 寫在前頭
-* 首先有[Python3環境](https://zh.wikipedia.org/wiki/Python#%E4%B8%93%E9%97%A8%E4%B8%BAPython%E8%AE%BE%E8%AE%A1%E7%9A%84IDE%E8%BD%AF%E4%BB%B6)
-* Webdriver
-
-下載chromedriver：[Windows](https://chromedriver.storage.googleapis.com/2.40/chromedriver_win32.zip)、[Linux](https://chromedriver.storage.googleapis.com/2.40/chromedriver_linux64.zip)\
-解壓後把exe丟進`C:\Windows`目錄
-* 安裝瀏覽器自動化套件
+1. 首先有[Python3環境](https://zh.wikipedia.org/wiki/Python#%E4%B8%93%E9%97%A8%E4%B8%BAPython%E8%AE%BE%E8%AE%A1%E7%9A%84IDE%E8%BD%AF%E4%BB%B6)
+2. 下載chromedriver：[Windows](https://chromedriver.storage.googleapis.com/2.40/chromedriver_win32.zip)、[Linux](https://chromedriver.storage.googleapis.com/2.40/chromedriver_linux64.zip) \
+解壓後把exe丟進`C:\Windows`目錄下
+3. 安裝瀏覽器自動化套件
 ```shell
 pip3 install selenium
 ```
