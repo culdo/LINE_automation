@@ -1,4 +1,4 @@
-from selenium.webdriver import Chrome
+from selenium.webdriver import Chrome, ActionChains
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
@@ -13,7 +13,7 @@ import webbrowser
 import glob
 
 stu_user = 'use4rline@gmail.com'
-stu_passwd = 'CIR4LINE'
+stu_passwd = 'ofmtpyaqxhhesqkf'
 TEXT = "驗證碼："
 mail = MIMEMultipart('alternative')
 mail['From'] = stu_user
@@ -39,6 +39,7 @@ else:
     chrome_option.add_argument("--load-extension=" + ext_path[-1])
     browser = Chrome(chrome_options=chrome_option)
 
+idle_time = 0
 # chrome_option.add_extension("extension_2_1_4_0.crx")
 
 
@@ -51,8 +52,9 @@ def choose_room(room):
     # time.sleep(0.5)
     # time.sleep(1)
     element = WebDriverWait(browser, 99).until(
-        EC.presence_of_element_located((By.XPATH, '//*[@id="_chat_list_body"]/li[@title="'+room+'"]')))
-    element.click()
+        EC.presence_of_element_located((By.XPATH, '//ul[@id="_chat_list_body"]/li[@title="%s"]' % room)))
+    ActionChains(browser).move_to_element(element).click().perform()
+    #element.click()
 
     time.sleep(0.5)
     element = WebDriverWait(browser, 99).until(
@@ -65,6 +67,11 @@ def choose_room(room):
     # data_local_id = browser.find_element_by_css_selector("div.MdRGT07Cont:last-child").get_attribute("data-local-id")
     input_area = browser.find_element_by_id("_chat_room_input")
 
+def check_idle(check_time=20):
+    global idle_time
+    if time.time()-idle_time > check_time:
+        ActionChains(browser).move_to_element(input_area).send_keys(Keys.ENTER).perform()
+        idle_time =time.time()
 
 def has_new(setwho="All"):
     global data_local_id
@@ -89,6 +96,8 @@ def has_new(setwho="All"):
                 loop = True
 
         return new_text
+    else:
+        check_idle()
 
 
 def read():
