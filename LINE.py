@@ -12,8 +12,8 @@ from selenium.common.exceptions import WebDriverException, StaleElementReference
 import webbrowser
 import glob
 
-stu_user = 'use4rline@gmail.com'
-stu_passwd = 'ofmtpyaqxhhesqkf'
+stu_user = "your_gmail_here@gmail.com"
+stu_passwd = 'gmail_pass'
 TEXT = "驗證碼："
 mail = MIMEMultipart('alternative')
 mail['From'] = stu_user
@@ -142,7 +142,7 @@ def login(username, pwd, email=None):
 
 
 if __name__ == "__main__":
-    login("george0228489372@yahoo.com.tw", "wuorsut", "wuorsut@gmail.com")
+    login(*args_here)
     choose_room("Alo Smo")
 
     timestamp = time.time()
