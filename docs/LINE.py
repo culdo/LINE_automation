@@ -11,9 +11,10 @@ import os, time, platform
 from selenium.common.exceptions import WebDriverException, StaleElementReferenceException
 import webbrowser
 import glob
+import json
 
 stu_user = 'use4rline@gmail.com'
-stu_passwd = 'CIR4LINE'
+stu_passwd = 'ofmtpyaqxhhesqkf'
 TEXT = "驗證碼："
 mail = MIMEMultipart('alternative')
 mail['From'] = stu_user
@@ -63,7 +64,7 @@ def choose_room(room):
         EC.presence_of_element_located((By.CSS_SELECTOR, "div.MdRGT07Cont:last-child")))
     data_local_id = element.get_attribute("data-local-id")
     # data_local_id = browser.find_element_by_css_selector("div.MdRGT07Cont:last-child").get_attribute("data-local-id")
-    input_area = browser.find_element_by_id("_chat_room_input")
+    input_area = browser.find_element(By.ID, "_chat_room_input")
 
 
 def has_new(setwho="All"):
@@ -71,11 +72,11 @@ def has_new(setwho="All"):
     if setwho == "All":
         updated = WebDriverWait(browser, 99).until(
         EC.presence_of_all_elements_located((By.CLASS_NAME, "MdRGT07Cont")))[-1]
-        # updated = browser.find_elements_by_class_name("MdRGT07Cont")[-1]
+        # updated = browser.find_elements((By.CLASS_NAME, "MdRGT07Cont")[-1]
     else:
         updated = WebDriverWait(browser, 99).until(
         EC.presence_of_all_elements_located((By.CLASS_NAME, "mdRGT07"+setwho)))[-1]
-        # updated = browser.find_elements_by_class_name("mdRGT07" + setwho)[-1]
+        # updated = browser.find_elements((By.CLASS_NAME, "mdRGT07" + setwho)[-1]
     data_local_id_now = updated.get_attribute("data-local-id")
     if data_local_id != data_local_id_now:
         data_local_id = data_local_id_now
@@ -83,7 +84,7 @@ def has_new(setwho="All"):
         loop = True
         while loop:
             try:
-                new_text = updated.find_element_by_class_name("mdRGT07MsgTextInner").text
+                new_text = updated.find_element(By.CLASS_NAME, "mdRGT07MsgTextInner").text
                 loop = False
             except StaleElementReferenceException:
                 loop = True
@@ -92,11 +93,11 @@ def has_new(setwho="All"):
 
 
 def read():
-    return browser.find_elements_by_css_selector("div.mdRGT07Own .mdRGT07MsgTextInner")[-1].text
+    return browser.find_elements(By.CSS_SELECTOR, "div.mdRGT07Own .mdRGT07MsgTextInner")[-1].text
 
 
 def send(msg):
-    # data_local_id = browser.find_elements_by_css_selector("div.mdRGT07Cont").get_attribute("data-local-id")
+    # data_local_id = browser.find_elements(By.CSS_SELECTOR, "div.mdRGT07Cont").get_attribute("data-local-id")
     browser.execute_script(jquery, msg)
     loop = True
     if loop:
@@ -118,8 +119,8 @@ def login(username, pwd, email=None):
             EC.presence_of_element_located((By.CSS_SELECTOR, "#line_login_email")))
 
     element.send_keys(username+Keys.TAB+pwd+Keys.ENTER)
-    # browser.find_element_by_id("line_login_pwd").send_keys("wuorsut")
-    # browser.find_element_by_id("login_btn").send_keys(Keys.ENTER)
+    # browser.find_element(By.ID, "line_login_pwd").send_keys("wuorsut")
+    # browser.find_element(By.ID, "login_btn").send_keys(Keys.ENTER)
     element = WebDriverWait(browser, 99).until(
             EC.presence_of_element_located((By.CLASS_NAME, "mdCMN01Code")))
 
@@ -133,25 +134,15 @@ def login(username, pwd, email=None):
 
 
 if __name__ == "__main__":
-    login("your-line-email", "your-line-pwd", "your-email-for-receving-verfication-code")
-    choose_room("Alo Smo")
+    with open('credential.json') as json_file:
+        credential = json.load(json_file)
+    login(credential["line_email"], credential["line_pwd"], credential["for_verification_email"])
+    choose_room("喆")
 
     timestamp = time.time()
     text = None
     while True:
-        # try:
-        timenow = time.time()
-
-        if (timenow-timestamp)<=0.5:
-            text = has_new()
-            if text and text != str(timestamp):
-                print(text)
-
-        else:
-            send(timenow)
-            # print(timenow)
-            timestamp = timenow
-        # text = has_new()
-        # if text:
-        #     print(text)
+        text = has_new()
+        if text:
+            send(text)
 
