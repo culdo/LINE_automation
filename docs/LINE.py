@@ -133,7 +133,7 @@ def login(username, pwd, email=None):
 
 
 if __name__ == "__main__":
-    login("george0228489372@yahoo.com.tw", "wuorsut", "wuorsut@gmail.com")
+    login("your-line-email", "your-line-pwd", "your-email-for-receving-verfication-code")
     choose_room("Alo Smo")
 
     timestamp = time.time()
